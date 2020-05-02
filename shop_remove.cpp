@@ -20,12 +20,6 @@ int rremove(char * name, cosmetic mass[], int size){
 		cout<<"Cannot open file."<<endl;
 		return 1;
 	}
-	
-	cosmetic c3;
-	while(f.read((char *)&c3, sizeof(cosmetic)))
-		for(i = size-1; i >= 0; i--)
-			f.read((char *)&mass[i], sizeof(cosmetic));
-	f.close();
 
 	int rm_i, k = 0;
 	for(i = size-1; i >= 0; i--){
@@ -41,9 +35,12 @@ int rremove(char * name, cosmetic mass[], int size){
 			return 1;
 		}
 		
-		for(i = size-1; i >=0; i--){
+		for(i = 0; i<(size-1); i++){
 			if (i != rm_i)
-				newf.write((char *)&mass[i], sizeof(cosmetic));
+				newf<<mass[i].type;
+				newf<<mass[i].color;
+				newf<<mass[i].price;
+				newf<<mass[i].place;
 			}
 		newf.close();
 		size--;
