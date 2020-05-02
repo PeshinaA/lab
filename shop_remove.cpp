@@ -47,4 +47,5 @@ int rremove(char * name, cosmetic mass[], int size){
 		cout<<" Product removed."<<endl;
 	}else
 		cout<<" Product not found."<<endl;
+	menu(name, mass, size);
 }
