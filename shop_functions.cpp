@@ -16,21 +16,21 @@ void menu(char * name, cosmetic mass[], int size){
 	switch(number){
 		case 1:
 			add(name, mass, size);
-			size++;
 			break;
 		case 2:
-			pprint(name);
+			pprint(name, mass, size);
 			break;
 		case 3:
 			rremove(name, mass, size);
 			break;
 		case 4:
-			find(name);
+			find(name, mass, size);
 			break;
 		case 5:
-			clear(name);
+			clear(name, mass, size);
 			break;
 		case 6:
+			delete [] mass;
 			cout<<"  Goodbye."<<endl;
 			exit(0);
 
@@ -40,45 +40,58 @@ void menu(char * name, cosmetic mass[], int size){
 	}
 }
 
-void clear(char * name){
+void clear(char * name, cosmetic mass[], int size){
 	ofstream f(name, ios_base::trunc);
 	f.close();
+	menu(name, mass, size);
 }
 
 int add(char * name, cosmetic mass[], int size){
+	cout<<"   How many: ";
+	int n;
+	cin>>n;
 	cout<<"   Please enter information."<<endl;
-	cosmetic c;
-        cout<<"Type: ";
-	getline(cin, c.type);
-	cout<<"Color: ";
-	getline(cin, c.color);
-	cout<<"Price: ";
-	cin>>c.price;
-	cout<<"Place: ";
-	cin>>c.place;
-
-	mass[size] = c;
+	
+	for(int i = 0; i<n; i++){
+        	cout<<"Type: ";
+		getline(cin, mass[i].type);
+		cout<<"Color: ";
+		getline(cin, mass[i].color);
+		cout<<"Price: ";
+		cin>>mass[i].price;
+		cout<<"Place: ";
+		cin>>mass[i].place;
+		size++;
+	}
+	
 	ofstream f(name);
 	if (!f.is_open()){
 		cout<<"Cannot open file."<<endl;
 		return 1;
 	}
 	
-	f.write((char *)&mass[size], sizeof(cosmetic));
+	for(int i = 0; i<n; i++){
+		f<<mass[i].type;
+		f<<mass[i].color;
+		f<<mass[i].price;
+		f<<mass[i].place;
+	}
+	
 	f.close();
 	cout<<"  Product added."<<endl;
+	menu(name, mass, size);
 }
 
-int pprint(char * name){
-	cosmetic c2;
+int pprint(char * name, cosmetic mass[], int size){
 	ifstream f(name);
 	if (!f.is_open()){
 		cout<<"Cannot open file."<<endl;
 		return 1;
 	}
 	
-	while(f.read((char *)&c2, sizeof(cosmetic))){
-		cout<<"Type: "<<c2.type<<"Color: "<<c2.color<<"Price: "<<c2.price<<"Place: "<<c2.place<<endl;
+	for(int i = 0; i<size; i++){
+		cout<<"Type: "<<mass[i].type<<"Color: "<<mass[i].color<<"Price: "<<mass[i].price<<"Place: "<<mass[i].place<<endl;
 	}
 	f.close();
+	menu(name, mass, size);
 }
